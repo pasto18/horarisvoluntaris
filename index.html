@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horaris Voluntarissssss</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f3; color: #1a1a1a; padding: 1.5rem 1rem; }
+h1 { font-size: 20px; font-weight: 500; margin-bottom: 1.25rem; }
+.tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; }
+.tab-btn { font-size: 13px; font-weight: 500; padding: 7px 18px; border-radius: 20px; border: 0.5px solid #ccc; background: #fff; color: #666; cursor: pointer; transition: background 0.15s; }
+.tab-btn:hover { background: #eee; }
+.tab-btn.active-cuina { background: #E1F5EE; color: #0F6E56; border-color: #9FE1CB; }
+.tab-btn.active-bar { background: #EEEDFE; color: #3C3489; border-color: #CECBF6; }
+.source-pill { display: inline-block; font-size: 9px; font-weight: 500; padding: 2px 7px; border-radius: 20px; margin-bottom: 6px; letter-spacing: 0.03em; text-transform: uppercase; }
+.pill-cuina { background: #ff0000; color: #ffffff; }
+.pill-bar   { background: #1100ff; color: #fafafa; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
+.filter-group { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 130px; }
+.filter-label { font-size: 11px; color: #888; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+select { width: 100%; font-size: 13px; padding: 6px 10px; border-radius: 8px; border: 0.5px solid #ccc; background: #fff; color: #1a1a1a; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; cursor: pointer; }
+.reset-btn { align-self: flex-end; font-size: 12px; color: #666; border: 0.5px solid #ccc; background: none; border-radius: 8px; padding: 6px 12px; cursor: pointer; white-space: nowrap; }
+.reset-btn:hover { background: #eee; }
+.count { font-size: 12px; color: #888; margin-bottom: 1rem; }
+.day-section { margin-bottom: 2rem; }
+.day-title { font-size: 17px; font-weight: 500; color: #1a1a1a; margin: 0 0 10px; padding-bottom: 8px; border-bottom: 0.5px solid #ddd; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 10px; }
+.task-card { background: #fff; border: 0.5px solid #ddd; border-radius: 12px; padding: 12px 14px; }
+.task-time { font-size: 12px; color: #888; margin: 0 0 10px; }
+.task-label { font-size: 13px; font-weight: 500; color: #1a1a1a; margin: 0 0 4px; }
+.volunteers { display: flex; flex-wrap: wrap; gap: 5px; }
+.vol-chip { font-size: 11px; background: #f1f0e8; color: #5f5e5a; border-radius: 20px; padding: 2px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.vol-chip.highlight { background: #EEEDFE; color: #3C3489; font-weight: 500; }
+.no-vol { font-size: 11px; color: #aaa; font-style: italic; }
+.task-badge { display: inline-block; font-size: 12px; padding: 2px 7px; border-radius: 20px; margin-bottom: 8px; }
+.badge-esmorzar { background: #FAEEDA; color: #854F0B; }
+.badge-dinar    { background: #E1F5EE; color: #0F6E56; }
+.badge-sopar    { background: #EEEDFE; color: #3C3489; }
+.badge-neteja   { background: #F1EFE8; color: #5F5E5A; }
+.badge-servir   { background: #FAECE7; color: #993C1D; }
+.badge-bar      { background: #E6F1FB; color: #185FA5; }
+.badge-other    { background: #f1f0e8; color: #5f5e5a; }
+.empty { font-size: 14px; color: #888; text-align: center; padding: 3rem 0; }
+.status { font-size: 12px; padding: 8px 12px; background: #fff3cd; border-radius: 8px; border: 0.5px solid #ffe69c; color: #856404; margin-bottom: 1rem; }
+.loading { font-size: 13px; color: #888; padding: 2rem 0; }
+
+@media (max-width: 480px) {
+  .cards-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .task-card { padding: 10px 11px; }
+  .filter-group { min-width: calc(50% - 4px); }
+}
+</style>
+</head>
+<body>
+
+<h1>Horaris Voluntarissssss ★</h1>
+
+<div class="tabs">
+  <button class="tab-btn active-cuina" id="tab-cuina" onclick="switchTab('cuina')" style="background-color: red;color: white;">CUINA</button>
+  <button class="tab-btn" id="tab-bar" onclick="switchTab('bar')" style="background-color: blue;color: white;">BAR</button>
+  <button class="tab-btn" id="tab-all" onclick="switchTab('all')">TOT</button>
+</div>
+
+<div id="status"></div>
+
+<div class="filters">
+  <div class="filter-group">
+    <span class="filter-label">Día</span>
+    <select id="f-day"><option value="">⚐Todos los días</option></select>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label" id="label-task">⬀Tarea / Bar</span>
+    <select id="f-task"><option value="">Todos</option></select>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">⛄︎Voluntari@</span>
+    <select id="f-vol"><option value="">Todos</option></select>
+  </div>
+  <button class="reset-btn" onclick="resetFilters()">Limpiar</button>
+</div>
+<div class="count" id="count"></div>
+<div id="root"><div class="loading">Cargando datos...</div></div>
+
+<script>
+const CUINA_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRQDMBW33i1ouQiTilmGYxxvGRcjd-_XcGQ4iT-2rBjPZVU4vek5qPvNjyKHQr8ajG8crhnwJ3roA8k/pub?gid=1597354498&single=true&output=csv';
+const BAR_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRQDMBW33i1ouQiTilmGYxxvGRcjd-_XcGQ4iT-2rBjPZVU4vek5qPvNjyKHQr8ajG8crhnwJ3roA8k/pub?gid=476196296&single=true&output=csv';
+
+let ALL_ROWS = [];
+let currentTab = 'cuina';
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cols = [];
+    let cur = '', inQ = false;
+    for (let c of lines[i]) {
+      if (c === '"') inQ = !inQ;
+      else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+      else cur += c;
+    }
+    cols.push(cur.trim());
+    if (cols[1] && cols[1].trim()) rows.push(cols);
+  }
+  return rows;
+}
+
+function getVols(row, source) {
+  let startIndex = 10; 
+  const slice = row.slice(startIndex, 18);
+  return slice.filter(v => v && v.trim() && v !== "OK" && v !== "FALSE").map(v => v.trim());
+}
+
+function normalizeRows(rows, source) {
+  return rows.map(r => ({
+    day:    r[1].replace(/"/g, '').trim(),
+    start:  r[2] || '',
+    end:    r[3] || '',
+    label:  r[6] || '',
+    vols:   getVols(r, source),
+    source: source
+  })).filter(r => r.day);
+}
+
+function getBadgeClass(label, source) {
+  if (source === 'bar') return 'badge-bar';
+  const t = (label || '').toLowerCase();
+  if (t.includes('esmorzar')) return 'badge-esmorzar';
+  if (t.includes('dinar'))    return 'badge-dinar';
+  if (t.includes('neteja'))   return 'badge-neteja';
+  if (t.includes('servir'))   return 'badge-servir';
+  if (t.includes('sopar'))    return 'badge-sopar';
+  return 'badge-other';
+}
+
+function getFilteredRows() {
+  const day  = document.getElementById('f-day').value;
+  const task = document.getElementById('f-task').value;
+  const vol  = document.getElementById('f-vol').value;
+
+  let rows = ALL_ROWS;
+  if (currentTab === 'cuina') rows = rows.filter(r => r.source === 'cuina');
+  if (currentTab === 'bar')   rows = rows.filter(r => r.source === 'bar');
+  if (day)  rows = rows.filter(r => r.day === day);
+  if (task) rows = rows.filter(r => r.label === task);
+  if (vol)  rows = rows.filter(r => r.vols.includes(vol));
+  return rows;
+}
+
+function rebuildFilters() {
+  let rows = ALL_ROWS;
+  if (currentTab === 'cuina') rows = rows.filter(r => r.source === 'cuina');
+  if (currentTab === 'bar')   rows = rows.filter(r => r.source === 'bar');
+
+  const days  = [...new Set(rows.map(r => r.day))];
+  const tasks = [...new Set(rows.map(r => r.label).filter(Boolean))].sort();
+  const volSet = new Set();
+  rows.forEach(r => r.vols.forEach(v => volSet.add(v)));
+  const vols = [...volSet].sort();
+
+  function refill(id, opts, placeholder) {
+    const sel = document.getElementById(id);
+    const cur = sel.value;
+    sel.innerHTML = `<option value="">${placeholder}</option>`;
+    opts.forEach(o => {
+      const el = document.createElement('option');
+      el.value = o; el.textContent = o;
+      if (o === cur) el.selected = true;
+      sel.appendChild(el);
+    });
+  }
+  refill('f-day',  days,  'Todos los días');
+  refill('f-task', tasks, 'Todos');
+  refill('f-vol',  vols,  'Todos');
+}
+
+function render() {
+  const volFilter = document.getElementById('f-vol').value;
+  const rows = getFilteredRows();
+  
+  // 1. Agrupamos las filas por nombre de día
+  const byDay = {}; 
+  const dayOrder = [];
+
+  for (const row of rows) {
+    const dayName = row.day;
+    if (!byDay[dayName]) { 
+      byDay[dayName] = []; 
+      dayOrder.push(dayName); 
+    }
+    byDay[dayName].push(row);
+  }
+
+  // 2. Ordenamos las tareas dentro de cada día con lógica de festival
+  for (const day in byDay) {
+    byDay[day].sort((a, b) => {
+      const labelA = (a.label || '').toLowerCase();
+      const labelB = (b.label || '').toLowerCase();
+
+      // PRIORIDAD 1: Esmorzar siempre arriba del todo
+      if (labelA.includes('esmorzar') && !labelB.includes('esmorzar')) return -1;
+      if (!labelA.includes('esmorzar') && labelB.includes('esmorzar')) return 1;
+
+      // PRIORIDAD 2: Ajuste de horas de madrugada (antes de las 10:00 AM)
+      // Extraemos la hora (HH) del string de inicio (HH:mm)
+      const getHour = (timeStr) => parseInt((timeStr || "00:00").split(':')[0]);
+      
+      let hourA = getHour(a.start);
+      let hourB = getHour(b.start);
+
+      // Si la hora es menor a 10, le sumamos 24 para que "pese" más que las horas del día
+      // Ejemplo: las 01:00 se convierten en 25:00, las 03:00 en 27:00.
+      if (hourA < 10) hourA += 24;
+      if (hourB < 10) hourB += 24;
+
+      // Comparamos las horas ajustadas
+      if (hourA !== hourB) {
+        return hourA - hourB;
+      }
+      
+      // Si la hora es la misma, comparamos los minutos
+      return a.start.localeCompare(b.start);
+    });
+  }
+  // 3. Generamos el HTML
+  let html = '';
+  for (const day of dayOrder) {
+    html += `
+      <div class="day-section">
+        <div class="day-title">${day}</div>
+        <div class="cards-grid">`;
+    
+    for (const t of byDay[day]) {
+      const isAllTab = currentTab === 'all';
+      html += `
+        <div class="task-card">
+          ${isAllTab ? `<span class="source-pill pill-${t.source}">${t.source}</span><br>` : ''}
+          <span class="task-badge ${getBadgeClass(t.label, t.source)}">${t.label || '—'}</span>
+          <div class="task-time">${t.start} – ${t.end}</div>
+          <div class="volunteers">${
+            t.vols.length
+              ? t.vols.map(v => `<span class="vol-chip${volFilter && v === volFilter ? ' highlight' : ''}">${v}</span>`).join('')
+              : '<span class="no-vol">Sin asignar</span>'
+          }</div>
+        </div>`;
+    }
+    html += `</div></div>`;
+  }
+  document.getElementById('root').innerHTML = html;
+}
+
+// ESTAS SON LAS FUNCIONES QUE SE HABÍAN BORRADO
+function applyFilters() { render(); }
+function resetFilters() {
+  document.getElementById('f-day').value  = '';
+  document.getElementById('f-task').value = '';
+  document.getElementById('f-vol').value  = '';
+  render();
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  ['cuina','bar','all'].forEach(t => {
+    const btn = document.getElementById('tab-' + t);
+    btn.className = 'tab-btn';
+    if (t === tab) btn.classList.add('active-' + (tab === 'all' ? 'cuina' : tab));
+  });
+  rebuildFilters();
+  render();
+}
+
+// Event Listeners para los filtros
+document.getElementById('f-day').addEventListener('change', applyFilters);
+document.getElementById('f-task').addEventListener('change', applyFilters);
+document.getElementById('f-vol').addEventListener('change', applyFilters);
+
+// Lógica de carga
+let loadedCount = 0;
+let cuinaRows = [], barRows = [];
+
+function tryInit() {
+  loadedCount++;
+  if (loadedCount < 2) return;
+  ALL_ROWS = [...normalizeRows(cuinaRows, 'cuina'), ...normalizeRows(barRows, 'bar')];
+  rebuildFilters();
+  render();
+}
+
+fetch(CUINA_URL)
+  .then(r => r.text())
+  .then(t => { cuinaRows = parseCSV(t); tryInit(); })
+  .catch(() => {
+    console.warn("Usando Fallback Cuina");
+    tryInit();
+  });
+
+fetch(BAR_URL)
+  .then(r => r.text())
+  .then(t => { barRows = parseCSV(t); tryInit(); })
+  .catch(() => {
+    console.warn("Usando Fallback Bar");
+    tryInit();
+  });
+</script>
+</body>
+</html>
