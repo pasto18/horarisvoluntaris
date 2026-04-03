@@ -282,35 +282,83 @@ document.getElementById('f-day').addEventListener('change', applyFilters);
 document.getElementById('f-task').addEventListener('change', applyFilters);
 document.getElementById('f-vol').addEventListener('change', applyFilters);
 
-async function loadData() {
+const CACHE_KEY = 'festival_rows_v1';
+const REFRESH_MS = 5 * 60 * 1000; // 5 minutos
+
+function saveCache(rows) {
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), rows })); } catch(e) {}
+}
+
+function loadCache() {
   try {
-    const [resC, resB, resT1, resT2] = await Promise.all([
-      fetch(CUINA_URL).then(r => r.text()),
-      fetch(BAR_URL).then(r => r.text()),
-      fetch(TEC1_URL).then(r => r.text()),
-      fetch(TEC2_URL).then(r => r.text())
-    ]);
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const { ts, rows } = JSON.parse(raw);
+    return { rows, ageMs: Date.now() - ts };
+  } catch(e) { return null; }
+}
 
-    const cRows = parseCSV(resC);
-    const bRows = parseCSV(resB);
-    const t1Rows = parseCSV(resT1);
-    const t2Rows = parseCSV(resTec2 = resT2);
-    
-    ALL_ROWS = [
-      ...normalizeRows(cRows, 'cuina'),
-      ...normalizeRows(bRows, 'bar'),
-      ...normalizeRows([...t1Rows, ...t2Rows], 'tecnica')
-    ];
+function showLastUpdated(ageMs) {
+  const mins = Math.round(ageMs / 60000);
+  const txt = mins < 1 ? 'ahora mismo' : `hace ${mins} min`;
+  let el = document.getElementById('last-updated');
+  if (!el) {
+    el = document.createElement('p');
+    el.id = 'last-updated';
+    el.style.cssText = 'font-size:11px;color:#aaa;margin-bottom:0.5rem;';
+    document.getElementById('count').before(el);
+  }
+  el.textContent = `Datos actualizados ${txt}`;
+}
 
+async function fetchAll() {
+  const [resC, resB, resT1, resT2] = await Promise.all([
+    fetch(CUINA_URL).then(r => r.text()),
+    fetch(BAR_URL).then(r => r.text()),
+    fetch(TEC1_URL).then(r => r.text()),
+    fetch(TEC2_URL).then(r => r.text())
+  ]);
+  const rows = [
+    ...normalizeRows(parseCSV(resC),  'cuina'),
+    ...normalizeRows(parseCSV(resB),  'bar'),
+    ...normalizeRows([...parseCSV(resT1), ...parseCSV(resT2)], 'tecnica')
+  ];
+  return rows;
+}
+
+async function loadData(silent = false) {
+  // 1. Carga caché instantánea si existe
+  if (!silent) {
+    const cached = loadCache();
+    if (cached) {
+      ALL_ROWS = cached.rows;
+      rebuildFilters();
+      render();
+      showLastUpdated(cached.ageMs);
+    } else {
+      document.getElementById('root').innerHTML = '<div class="loading">Cargando datos...</div>';
+    }
+  }
+
+  // 2. Fetch en segundo plano
+  try {
+    const rows = await fetchAll();
+    ALL_ROWS = rows;
+    saveCache(rows);
     rebuildFilters();
     render();
-  } catch (e) {
-    console.error(e);
-    document.getElementById('root').innerHTML = "Error cargando datos.";
+    showLastUpdated(0);
+  } catch(e) {
+    console.warn('Fetch fallido, usando caché', e);
+    if (!silent && ALL_ROWS.length === 0) {
+      document.getElementById('root').innerHTML = '<div class="empty">Sin conexión y sin datos guardados. Conéctate a internet e intenta de nuevo.</div>';
+    }
   }
 }
 
+// Carga inicial + refresco automático cada 5 minutos
 loadData();
+setInterval(() => loadData(true), REFRESH_MS);
 </script>
 </body>
 </html>
