@@ -15,7 +15,7 @@ h1 { font-size: 20px; font-weight: 500; margin-bottom: 1.25rem; }
 .pill-tecnica { background: #fffb00; color: #000000; }
 .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
 .filter-group { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 130px; }
-.filter-label { font-size: 11px; color: #888; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+.filter-label { font-size: 15px; color: #888; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
 select { width: 100%; font-size: 13px; padding: 6px 10px; border-radius: 8px; border: 0.5px solid #ccc; background: #fff; color: #1a1a1a; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; cursor: pointer; }
 .reset-btn { align-self: flex-end; font-size: 12px; color: #666; border: 0.5px solid #ccc; background: none; border-radius: 8px; padding: 6px 12px; cursor: pointer; white-space: nowrap; }
 .reset-btn:hover { background: #eee; }
@@ -103,10 +103,10 @@ let ALL_ROWS = [];
 let currentLang = 'es';
 
 const T = {
-  es: { volLabel: '⛄︎ Voluntari@', volPlaceholder: 'Todos', resetBtn: 'Limpiar', loading: 'Cargando...', noResults: 'No hay turnos disponibles', turno: n => `${n} turno${n !== 1 ? 's' : ''}`, unassigned: 'Sin asignar' },
-  cat: { volLabel: '⛄︎ Voluntari/a', volPlaceholder: 'Tots', resetBtn: 'Netejar', loading: 'Carregant...', noResults: 'No hi ha torns', turno: n => `${n} torn${n !== 1 ? 's' : ''}`, unassigned: 'Sense assignar' },
-  en: { volLabel: '⛄︎ Volunteer', volPlaceholder: 'All', resetBtn: 'Clear', loading: 'Loading...', noResults: 'No shifts', turno: n => `${n} shift${n !== 1 ? 's' : ''}`, unassigned: 'Unassigned' },
-  fr: { volLabel: '⛄︎ Bénévole', volPlaceholder: 'Tous', resetBtn: 'Effacer', loading: 'Chargement...', noResults: 'Aucun créneau', turno: n => `${n} créneau${n !== 1 ? 's' : ''}`, unassigned: 'Non assigné' }
+  es: { volLabel: 'Voluntari@:', volPlaceholder: 'BUSCA TU NOMBRE AQUÍ', resetBtn: 'Limpiar', loading: 'Cargando...', noResults: 'No hay turnos disponibles', turno: n => `${n} turno${n !== 1 ? 's' : ''}`, unassigned: 'Sin asignar' },
+  cat: { volLabel: 'Voluntari/a:', volPlaceholder: 'BUSCA EL TEU NOM AQUÍ', resetBtn: 'Netejar', loading: 'Carregant...', noResults: 'No hi ha torns', turno: n => `${n} torn${n !== 1 ? 's' : ''}`, unassigned: 'Sense assignar' },
+  en: { volLabel: 'Volunteer:', volPlaceholder: 'SEARCH FOR YOUR NAME HERE', resetBtn: 'Clear', loading: 'Loading...', noResults: 'No shifts', turno: n => `${n} shift${n !== 1 ? 's' : ''}`, unassigned: 'Unassigned' },
+  fr: { volLabel: 'Bénévole:', volPlaceholder: 'CHERCHE TON NOM ICI', resetBtn: 'Effacer', loading: 'Chargement...', noResults: 'Aucun créneau', turno: n => `${n} créneau${n !== 1 ? 's' : ''}`, unassigned: 'Non assigné' }
 };
 
 function isPast(dayString) {
