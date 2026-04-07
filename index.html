@@ -5,24 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Horaris Voluntarissssss</title>
 <style>
+/* Estilos se mantienen igual que en tu versión anterior */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f3; color: #1a1a1a; padding: 1.5rem 1rem; }
 h1 { font-size: 20px; font-weight: 500; margin-bottom: 1.25rem; }
-.tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; }
-.tab-btn { font-size: 13px; font-weight: 500; padding: 7px 18px; border-radius: 20px; border: 0.5px solid #ccc; background: #fff; color: #666; cursor: pointer; transition: background 0.15s; }
-.tab-btn:hover { background: #eee; }
-
-/* Estilos de botones de pestaña */
-.tab-btn.active-cuina { background: #ff0000 !important; color: #ffffff !important; border-color: #9FE1CB; }
-.tab-btn.active-bar { background: #1100ff !important; color: #ffffff !important; border-color: #CECBF6; }
-.tab-btn.active-tecnica { background: #000000 !important; color: #d9ff00 !important; border-color: #fffb00; }
-.tab-btn.active-all { background: #333 !important; color: #fff !important; }
-
 .source-pill { display: inline-block; font-size: 9px; font-weight: 500; padding: 2px 7px; border-radius: 20px; margin-bottom: 6px; letter-spacing: 0.03em; text-transform: uppercase; }
 .pill-cuina { background: #ff0000; color: #ffffff; }
 .pill-bar   { background: #1100ff; color: #fafafa; }
 .pill-tecnica { background: #fffb00; color: #000000; }
-
 .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
 .filter-group { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 130px; }
 .filter-label { font-size: 11px; color: #888; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
@@ -40,8 +30,6 @@ select { width: 100%; font-size: 13px; padding: 6px 10px; border-radius: 8px; bo
 .vol-chip { font-size: 11px; background: #f1f0e8; color: #5f5e5a; border-radius: 20px; padding: 2px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .vol-chip.highlight { background: #EEEDFE; color: #3C3489; font-weight: 500; }
 .no-vol { font-size: 11px; color: #aaa; font-style: italic; }
-
-/* Estilos de badges personalizados */
 .task-badge { display: inline-block; font-size: 12px; padding: 2px 7px; border-radius: 20px; margin-bottom: 8px; font-weight: 500; }
 .badge-esmorzar { background: #FAEEDA; color: #854F0B; }
 .badge-dinar    { background: #E1F5EE; color: #0F6E56; }
@@ -51,57 +39,107 @@ select { width: 100%; font-size: 13px; padding: 6px 10px; border-radius: 8px; bo
 .badge-bar      { background: #e0e0ff; color: #185FA5; }
 .badge-tecnica  { background: #fff3cd; color: #856404; border: 1px solid #ffe69c; }
 .badge-other    { background: #f1f0e8; color: #5f5e5a; }
-
 .empty { font-size: 14px; color: #888; text-align: center; padding: 3rem 0; }
 .loading { font-size: 13px; color: #888; padding: 2rem 0; }
-
-@media (max-width: 480px) {
-  .cards-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .task-card { padding: 10px 11px; }
-  .filter-group { min-width: calc(50% - 4px); }
-}
+.lang-selector { display: flex; justify-content: center; gap: 10px; margin-top: 1.5rem; }
+.lang-btn { font-size: 11px; font-weight: 600; padding: 5px 14px; border-radius: 20px; border: 1px solid #bbb; background: #fff; color: #444; cursor: pointer; letter-spacing: 0.05em; }
+.lang-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+@media (max-width: 480px) { .cards-grid { grid-template-columns: 1fr 1fr; gap: 8px; } .filter-group { min-width: calc(50% - 4px); } }
 </style>
 </head>
 <body>
 
-<h1>Horaris Voluntarissssss ★</h1>
-<p>Esperar a que carguen los datos...impacienteeessss</p>
-<div style="height: 20px;"></div>
+<h1 style="text-align: center; font-size: 2rem; margin-bottom: 1vh;">Hola amiguis!!</h1>
 
-<div class="tabs">
-  <button class="tab-btn active-cuina" id="tab-cuina" onclick="switchTab('cuina')" style="background-color: red;color: white;">CUINA</button>
-  <button class="tab-btn" id="tab-bar" onclick="switchTab('bar')" style="background-color: blue;color: white;">BAR</button>
-  <button class="tab-btn" id="tab-tecnica" onclick="switchTab('tecnica')" style="background-color: #f6ff00;color: rgb(0, 0, 0);">TÈCNICA</button>
-  <button class="tab-btn" id="tab-all" onclick="switchTab('all')">TOT</button>
+<div id="text-es" class="lang-block">
+  <p><br>Seleccionando vuestro NOMBRE podréis ver los turnos asignados.<br><br><strong>El horario puede cambiar, así que revisadlo regularmente.</strong><br><br>Si no podéis hacer un turno, intentad cambiarlo — si no, avisadme.<br><br>ACTUALIZAR LA WEB CADA VEZ</p>
+  <p style="text-align: center; margin-top: 1rem;"><strong>CLARA: +34 664 33 61 65</strong></p>
 </div>
+<div id="text-cat" class="lang-block" style="display:none;">
+  <p><br>Seleccionant el vostre NOM podreu veure els torns assignats.<br><br><strong>L'horari pot canviar, així que reviseu-lo regularment.</strong><br><br>Si no podeu fer un torn, intenteu canviar-lo — si no, aviseu-me.<br><br>ACTUALITZEU LA WEB CADA VEGADA</p>
+  <p style="text-align: center; margin-top: 1rem;"><strong>CLARA: +34 664 33 61 65</strong></p>
+</div>
+<div id="text-fr" class="lang-block" style="display:none;">
+  <p><br>En sélectionnant votre NOM, vous pouvez voir les créneaux assignés.<br><br><strong>L'horaire peut changer, vérifiez-le régulièrement !</strong><br><br>Si vous ne pouvez pas assurer un créneau, essayez de l'échanger.<br><br>ACTUALISEZ LE SITE</p>
+  <p style="text-align: center; margin-top: 1rem;"><strong>CLARA: +34 664 33 61 65</strong></p>
+</div>
+<div id="text-en" class="lang-block" style="display:none;">
+  <p><br>By selecting your NAME you can see the shifts assigned to you.<br><br><strong>The schedule may change, so please check it regularly!</strong><br><br>If you can't make a shift, try to swap with someone.<br><br>REFRESH THE WEBSITE</p>
+  <p style="text-align: center; margin-top: 1rem;"><strong>CLARA: +34 664 33 61 65</strong></p>
+</div>
+
+<div class="lang-selector">
+  <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ESP</button>
+  <button class="lang-btn" id="btn-cat" onclick="setLang('cat')">CAT</button>
+  <button class="lang-btn" id="btn-fr" onclick="setLang('fr')">FRA</button>
+  <button class="lang-btn" id="btn-en" onclick="setLang('en')">ENG</button>
+</div>
+
+<div style="height: 20px;"></div>
 
 <div class="filters">
   <div class="filter-group">
-    <span class="filter-label">⚐ Día</span>
-    <select id="f-day"><option value="">Todos los días</option></select>
-  </div>
-  <div class="filter-group">
-    <span class="filter-label" id="label-task">⬀ Tarea / Bar</span>
-    <select id="f-task"><option value="">Todos</option></select>
-  </div>
-  <div class="filter-group">
-    <span class="filter-label">⛄︎ Voluntari@</span>
+    <span class="filter-label" id="label-vol">⛄︎ Voluntari@</span>
     <select id="f-vol"><option value="">Todos</option></select>
   </div>
-  <button class="reset-btn" onclick="resetFilters()">Limpiar</button>
+  <button class="reset-btn" id="btn-reset" onclick="resetFilters()">Limpiar</button>
 </div>
 
 <div class="count" id="count"></div>
-<div id="root"><div class="loading">Cargando datos...</div></div>
+<div id="root"></div>
 
 <script>
+// --- CONFIGURACIÓN PARA TI ---
+const MOSTRAR_DESDE_DIA = 13; // Cambia este número para ocultar días futuros
+const DIA_LIBERACION = 12;    // El día que se "desbloquea" la vista completa (Domingo 12)
+// -----------------------------
+
 const CUINA_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRQDMBW33i1ouQiTilmGYxxvGRcjd-_XcGQ4iT-2rBjPZVU4vek5qPvNjyKHQr8ajG8crhnwJ3roA8k/pub?gid=1597354498&single=true&output=csv';
 const BAR_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRQDMBW33i1ouQiTilmGYxxvGRcjd-_XcGQ4iT-2rBjPZVU4vek5qPvNjyKHQr8ajG8crhnwJ3roA8k/pub?gid=476196296&single=true&output=csv';
 const TEC1_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRQDMBW33i1ouQiTilmGYxxvGRcjd-_XcGQ4iT-2rBjPZVU4vek5qPvNjyKHQr8ajG8crhnwJ3roA8k/pub?gid=1463016692&single=true&output=csv';
 const TEC2_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRQDMBW33i1ouQiTilmGYxxvGRcjd-_XcGQ4iT-2rBjPZVU4vek5qPvNjyKHQr8ajG8crhnwJ3roA8k/pub?gid=379489592&single=true&output=csv';
 
 let ALL_ROWS = [];
-let currentTab = 'cuina';
+let currentLang = 'es';
+
+const T = {
+  es: { volLabel: '⛄︎ Voluntari@', volPlaceholder: 'Todos', resetBtn: 'Limpiar', loading: 'Cargando...', noResults: 'No hay turnos disponibles', turno: n => `${n} turno${n !== 1 ? 's' : ''}`, unassigned: 'Sin asignar' },
+  cat: { volLabel: '⛄︎ Voluntari/a', volPlaceholder: 'Tots', resetBtn: 'Netejar', loading: 'Carregant...', noResults: 'No hi ha torns', turno: n => `${n} torn${n !== 1 ? 's' : ''}`, unassigned: 'Sense assignar' },
+  en: { volLabel: '⛄︎ Volunteer', volPlaceholder: 'All', resetBtn: 'Clear', loading: 'Loading...', noResults: 'No shifts', turno: n => `${n} shift${n !== 1 ? 's' : ''}`, unassigned: 'Unassigned' },
+  fr: { volLabel: '⛄︎ Bénévole', volPlaceholder: 'Tous', resetBtn: 'Effacer', loading: 'Chargement...', noResults: 'Aucun créneau', turno: n => `${n} créneau${n !== 1 ? 's' : ''}`, unassigned: 'Non assigné' }
+};
+
+function isPast(dayString) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const match = dayString.match(/\d+/);
+  if (!match) return false;
+  const dayNum = parseInt(match[0]);
+  
+  // Lógica de ocultación solicitada:
+  // 1. Si hoy es antes del domingo 12, ocultamos los días 13 en adelante.
+  if (today.getDate() < DIA_LIBERACION && dayNum >= MOSTRAR_DESDE_DIA) {
+    return true; 
+  }
+
+  // 2. Filtro normal cronológico (no mostrar días que ya pasaron)
+  const taskDate = new Date(today.getFullYear(), today.getMonth(), dayNum);
+  return taskDate < today;
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-block').forEach(b => b.style.display = 'none');
+  document.getElementById('text-' + lang).style.display = '';
+  document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('btn-' + lang).classList.add('active');
+  const t = T[lang];
+  document.getElementById('label-vol').textContent = t.volLabel;
+  document.getElementById('btn-reset').textContent = t.resetBtn;
+  const sel = document.getElementById('f-vol');
+  if (sel.options[0]) sel.options[0].textContent = t.volPlaceholder;
+  render();
+}
 
 function parseCSV(text) {
   const lines = text.trim().split('\n');
@@ -121,31 +159,18 @@ function parseCSV(text) {
 }
 
 function getVols(row, source) {
-  // En Cuina/Bar los vols suelen empezar en col 10 (K)
-  // En Técnica la tarea es H (7) y los voluntarios de L (11) a S (18)
   let start = (source === 'tecnica') ? 11 : 10;
   let end = (source === 'tecnica') ? 19 : 18;
-  const slice = row.slice(start, end);
-  return slice.filter(v => v && v.trim() && !["OK", "FALSE", "0"].includes(v)).map(v => v.trim());
+  return row.slice(start, end).filter(v => v && v.trim() && !["OK", "FALSE", "0"].includes(v)).map(v => v.trim());
 }
 
 function normalizeRows(rows, source) {
   return rows.map(r => {
-    // Limpieza de día para unificar (ej: "viernes, 10" -> "Viernes 10")
     let rawDay = r[1] ? r[1].replace(/"/g, '').trim() : '';
     if (rawDay) {
-      rawDay = rawDay.toLowerCase().replace(/,/g, '').replace(/\s+/g, ' ').trim();
-      rawDay = rawDay.charAt(0).toUpperCase() + rawDay.slice(1);
+      rawDay = rawDay.charAt(0).toUpperCase() + rawDay.slice(1).toLowerCase();
     }
-
-    return {
-      day:    rawDay,
-      start:  r[2] || '',
-      end:    r[3] || '',
-      label:  (source === 'tecnica' ? r[7] : r[6]) || '', // Tarea Técnica en H(7), otros en G(6)
-      vols:   getVols(r, source),
-      source: source
-    };
+    return { day: rawDay, start: r[2] || '', end: r[3] || '', label: (source === 'tecnica' ? r[7] : r[6]) || '', vols: getVols(r, source), source: source };
   }).filter(r => r.day && r.day !== "Dia");
 }
 
@@ -161,204 +186,71 @@ function getBadgeClass(label, source) {
   return 'badge-other';
 }
 
-function getFilteredRows() {
-  const day  = document.getElementById('f-day').value;
-  const task = document.getElementById('f-task').value;
-  const vol  = document.getElementById('f-vol').value;
+function render() {
+  const volFilter = document.getElementById('f-vol').value;
+  const rows = ALL_ROWS.filter(r => {
+    return !isPast(r.day) && (volFilter ? r.vols.includes(volFilter) : true);
+  });
 
-  let rows = ALL_ROWS;
-  if (currentTab !== 'all') rows = rows.filter(r => r.source === currentTab);
-  
-  if (day)  rows = rows.filter(r => r.day === day);
-  if (task) rows = rows.filter(r => r.label === task);
-  if (vol)  rows = rows.filter(r => r.vols.includes(vol));
-  return rows;
+  const t = T[currentLang];
+  const byDay = {};
+  const dayOrder = [];
+
+  rows.forEach(row => {
+    if (!byDay[row.day]) { byDay[row.day] = []; dayOrder.push(row.day); }
+    byDay[row.day].push(row);
+  });
+
+  let html = '';
+  dayOrder.forEach(day => {
+    html += `<div class="day-section"><div class="day-title">${day}</div><div class="cards-grid">`;
+    byDay[day].sort((a,b) => parseInt(a.start) - parseInt(b.start)).forEach(task => {
+      html += `
+        <div class="task-card">
+          <span class="source-pill pill-${task.source}">${task.source}</span><br>
+          <span class="task-badge ${getBadgeClass(task.label, task.source)}">${task.label || '—'}</span>
+          <div class="task-time">${task.start} – ${task.end}</div>
+          <div class="volunteers">${task.vols.length ? task.vols.map(v => `<span class="vol-chip${volFilter && v === volFilter ? ' highlight' : ''}">${v}</span>`).join('') : `<span class="no-vol">${t.unassigned}</span>`}</div>
+        </div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  document.getElementById('count').textContent = rows.length ? t.turno(rows.length) : '';
+  document.getElementById('root').innerHTML = html || `<div class="empty">${t.noResults}</div>`;
 }
 
 function rebuildFilters() {
-  let rows = ALL_ROWS;
-  if (currentTab !== 'all') rows = rows.filter(r => r.source === currentTab);
-
-  const days  = [...new Set(rows.map(r => r.day))];
-  const tasks = [...new Set(rows.map(r => r.label).filter(Boolean))].sort();
   const volSet = new Set();
-  rows.forEach(r => r.vols.forEach(v => volSet.add(v)));
-  const vols = [...volSet].sort();
-
-  function refill(id, opts, placeholder) {
-    const sel = document.getElementById(id);
-    const cur = sel.value;
-    sel.innerHTML = `<option value="">${placeholder}</option>`;
-    opts.forEach(o => {
-      const el = document.createElement('option');
-      el.value = o; el.textContent = o;
-      if (o === cur) el.selected = true;
-      sel.appendChild(el);
-    });
-  }
-  refill('f-day',  days,  'Todos los días');
-  refill('f-task', tasks, 'Todos');
-  refill('f-vol',  vols,  'Todos');
-}
-
-function render() {
-  const volFilter = document.getElementById('f-vol').value;
-  const rows = getFilteredRows();
-  
-  const byDay = {}; 
-  const dayOrder = [];
-
-  for (const row of rows) {
-    const dayName = row.day;
-    if (!byDay[dayName]) { 
-      byDay[dayName] = []; 
-      dayOrder.push(dayName); 
-    }
-    byDay[dayName].push(row);
-  }
-
-  // Ordenación lógica festival (Madrugadas al final)
-  for (const day in byDay) {
-    byDay[day].sort((a, b) => {
-      const labelA = (a.label || '').toLowerCase();
-      const labelB = (b.label || '').toLowerCase();
-      if (labelA.includes('esmorzar') && !labelB.includes('esmorzar')) return -1;
-      if (!labelA.includes('esmorzar') && labelB.includes('esmorzar')) return 1;
-
-      const getHour = (timeStr) => parseInt((timeStr || "00:00").split(':')[0]);
-      let hA = getHour(a.start);
-      let hB = getHour(b.start);
-      if (hA < 10) hA += 24;
-      if (hB < 10) hB += 24;
-
-      return hA !== hB ? hA - hB : a.start.localeCompare(b.start);
-    });
-  }
-
-  let html = '';
-  for (const day of dayOrder) {
-    html += `<div class="day-section"><div class="day-title">${day}</div><div class="cards-grid">`;
-    for (const t of byDay[day]) {
-      const isAllTab = currentTab === 'all';
-      html += `
-        <div class="task-card">
-          ${isAllTab ? `<span class="source-pill pill-${t.source}">${t.source}</span><br>` : ''}
-          <span class="task-badge ${getBadgeClass(t.label, t.source)}">${t.label || '—'}</span>
-          <div class="task-time">${t.start} – ${t.end}</div>
-          <div class="volunteers">${
-            t.vols.length
-              ? t.vols.map(v => `<span class="vol-chip${volFilter && v === volFilter ? ' highlight' : ''}">${v}</span>`).join('')
-              : '<span class="no-vol">Sin asignar</span>'
-          }</div>
-        </div>`;
-    }
-    html += `</div></div>`;
-  }
-  
-  document.getElementById('count').textContent = rows.length === 0 ? '' : `${rows.length} turno${rows.length !== 1 ? 's' : ''}`;
-  document.getElementById('root').innerHTML = html || '<div class="empty">No hay turnos con estos filtros</div>';
-}
-
-function applyFilters() { render(); }
-function resetFilters() {
-  document.getElementById('f-day').value  = '';
-  document.getElementById('f-task').value = '';
-  document.getElementById('f-vol').value  = '';
-  render();
-}
-
-function switchTab(tab) {
-  currentTab = tab;
-  ['cuina','bar','tecnica','all'].forEach(t => {
-    const btn = document.getElementById('tab-' + t);
-    btn.classList.remove('active-cuina', 'active-bar', 'active-tecnica', 'active-all');
-    if (t === tab) btn.classList.add('active-' + t);
+  ALL_ROWS.forEach(r => r.vols.forEach(v => volSet.add(v)));
+  const sel = document.getElementById('f-vol');
+  const cur = sel.value;
+  sel.innerHTML = `<option value="">${T[currentLang].volPlaceholder}</option>`;
+  [...volSet].sort().forEach(v => {
+    const el = document.createElement('option');
+    el.value = v; el.textContent = v;
+    if (v === cur) el.selected = true;
+    sel.appendChild(el);
   });
-  rebuildFilters();
-  render();
 }
 
-document.getElementById('f-day').addEventListener('change', applyFilters);
-document.getElementById('f-task').addEventListener('change', applyFilters);
-document.getElementById('f-vol').addEventListener('change', applyFilters);
-
-const CACHE_KEY = 'festival_rows_v1';
-const REFRESH_MS = 5 * 60 * 1000; // 5 minutos
-
-function saveCache(rows) {
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), rows })); } catch(e) {}
-}
-
-function loadCache() {
+async function loadData() {
   try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    if (!raw) return null;
-    const { ts, rows } = JSON.parse(raw);
-    return { rows, ageMs: Date.now() - ts };
-  } catch(e) { return null; }
-}
-
-function showLastUpdated(ageMs) {
-  const mins = Math.round(ageMs / 60000);
-  const txt = mins < 1 ? 'ahora mismo' : `hace ${mins} min`;
-  let el = document.getElementById('last-updated');
-  if (!el) {
-    el = document.createElement('p');
-    el.id = 'last-updated';
-    el.style.cssText = 'font-size:11px;color:#aaa;margin-bottom:0.5rem;';
-    document.getElementById('count').before(el);
-  }
-  el.textContent = `Datos actualizados ${txt}`;
-}
-
-async function fetchAll() {
-  const [resC, resB, resT1, resT2] = await Promise.all([
-    fetch(CUINA_URL).then(r => r.text()),
-    fetch(BAR_URL).then(r => r.text()),
-    fetch(TEC1_URL).then(r => r.text()),
-    fetch(TEC2_URL).then(r => r.text())
-  ]);
-  const rows = [
-    ...normalizeRows(parseCSV(resC),  'cuina'),
-    ...normalizeRows(parseCSV(resB),  'bar'),
-    ...normalizeRows([...parseCSV(resT1), ...parseCSV(resT2)], 'tecnica')
-  ];
-  return rows;
-}
-
-async function loadData(silent = false) {
-  // 1. Carga caché instantánea si existe
-  if (!silent) {
-    const cached = loadCache();
-    if (cached) {
-      ALL_ROWS = cached.rows;
-      rebuildFilters();
-      render();
-      showLastUpdated(cached.ageMs);
-    } else {
-      document.getElementById('root').innerHTML = '<div class="loading">Cargando datos...</div>';
-    }
-  }
-
-  // 2. Fetch en segundo plano
-  try {
-    const rows = await fetchAll();
-    ALL_ROWS = rows;
-    saveCache(rows);
+    const texts = await Promise.all([fetch(CUINA_URL), fetch(BAR_URL), fetch(TEC1_URL), fetch(TEC2_URL)].map(p => p.then(r => r.text())));
+    ALL_ROWS = [
+      ...normalizeRows(parseCSV(texts[0]), 'cuina'),
+      ...normalizeRows(parseCSV(texts[1]), 'bar'),
+      ...normalizeRows([...parseCSV(texts[2]), ...parseCSV(texts[3])], 'tecnica')
+    ];
     rebuildFilters();
     render();
-    showLastUpdated(0);
-  } catch(e) {
-    console.warn('Fetch fallido, usando caché', e);
-    if (!silent && ALL_ROWS.length === 0) {
-      document.getElementById('root').innerHTML = '<div class="empty">Sin conexión y sin datos guardados. Conéctate a internet e intenta de nuevo.</div>';
-    }
-  }
+  } catch(e) { console.error(e); }
 }
 
-// Carga inicial + refresco automático cada 5 minutos
+function resetFilters() { document.getElementById('f-vol').value = ''; render(); }
+document.getElementById('f-vol').addEventListener('change', render);
 loadData();
-setInterval(() => loadData(true), REFRESH_MS);
+setInterval(loadData, 300000);
 </script>
 </body>
 </html>
