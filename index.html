@@ -110,11 +110,12 @@ select { width: 100%; font-size: 13px; padding: 6px 10px; border-radius: 8px; bo
 const MOSTRAR_DESDE_DIA = 13; // Cambia este número para ocultar días futuros
 const DIA_LIBERACION = 12;    // El día que se "desbloquea" la vista completa (Domingo 12)
 // -----------------------------
+const BASE = 'https://api-sheets-festival.lisandromarq18.workers.dev/';
+const CUINA_URL = `${BASE}?sheet=cuina`;
+const BAR_URL   = `${BASE}?sheet=bar`;
+const TEC1_URL  = `${BASE}?sheet=tec1`;
+const TEC2_URL  = `${BASE}?sheet=tec2`;
 
-const CUINA_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRQDMBW33i1ouQiTilmGYxxvGRcjd-_XcGQ4iT-2rBjPZVU4vek5qPvNjyKHQr8ajG8crhnwJ3roA8k/pub?gid=1597354498&single=true&output=csv';
-const BAR_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRQDMBW33i1ouQiTilmGYxxvGRcjd-_XcGQ4iT-2rBjPZVU4vek5qPvNjyKHQr8ajG8crhnwJ3roA8k/pub?gid=476196296&single=true&output=csv';
-const TEC1_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRQDMBW33i1ouQiTilmGYxxvGRcjd-_XcGQ4iT-2rBjPZVU4vek5qPvNjyKHQr8ajG8crhnwJ3roA8k/pub?gid=1463016692&single=true&output=csv';
-const TEC2_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRQDMBW33i1ouQiTilmGYxxvGRcjd-_XcGQ4iT-2rBjPZVU4vek5qPvNjyKHQr8ajG8crhnwJ3roA8k/pub?gid=379489592&single=true&output=csv';
 
 let ALL_ROWS = [];
 let currentLang = 'es';
