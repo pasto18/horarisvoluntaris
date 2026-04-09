@@ -54,6 +54,9 @@ select { width: 100%; font-size: 13px; padding: 6px 10px; border-radius: 8px; bo
 .lang-btn { font-size: 11px; font-weight: 600; padding: 5px 14px; border-radius: 20px; border: 1px solid #bbb; background: #fff; color: #444; cursor: pointer; letter-spacing: 0.05em; }
 .lang-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
 @media (max-width: 480px) { .cards-grid { grid-template-columns: 1fr 1fr; gap: 8px; } .filter-group { min-width: calc(50% - 4px); } }
+.loading-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 0; gap: 14px; color: #888; font-size: 13px; }
+.spinner { width: 32px; height: 32px; border: 3px solid #e0e0e0; border-top-color: #888; border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -89,13 +92,18 @@ select { width: 100%; font-size: 13px; padding: 6px 10px; border-radius: 8px; bo
 <div class="filters">
   <div class="filter-group">
     <span class="filter-label" id="label-vol">⛄︎ Voluntari@</span>
-    <select id="f-vol"><option value="">Todos</option></select>
+    <select id="f-vol"><option value="">BUSCA TU NOMBRE AQUÍ</option></select>
   </div>
   <button class="reset-btn" id="btn-reset" onclick="resetFilters()">Limpiar</button>
 </div>
 
 <div class="count" id="count"></div>
-<div id="root"></div>
+<div id="root">
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <span>Cargando...</span>
+  </div>
+</div>
 
 <script>
 // --- CONFIGURACIÓN PARA TI ---
@@ -244,6 +252,10 @@ function rebuildFilters() {
 }
 
 async function loadData() {
+  if (ALL_ROWS.length === 0) {
+    const t = T[currentLang];
+    document.getElementById('root').innerHTML = `<div class="loading-state"><div class="spinner"></div><span>${t.loading}</span></div>`;
+  }
   try {
     const texts = await Promise.all([fetch(CUINA_URL), fetch(BAR_URL), fetch(TEC1_URL), fetch(TEC2_URL)].map(p => p.then(r => r.text())));
     ALL_ROWS = [
@@ -253,7 +265,12 @@ async function loadData() {
     ];
     rebuildFilters();
     render();
-  } catch(e) { console.error(e); }
+  } catch(e) {
+    console.error(e);
+    if (ALL_ROWS.length === 0) {
+      document.getElementById('root').innerHTML = `<div class="empty">⚠️ Error al cargar. Comprueba tu conexión y recarga la página.</div>`;
+    }
+  }
 }
 
 function resetFilters() { document.getElementById('f-vol').value = ''; render(); }
